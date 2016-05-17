@@ -1,6 +1,6 @@
 <?php
 
-namespace CoreModel\Exception;
+namespace Laracore\Exception;
 
 class NoRepositoryToInstantiateException extends \Exception
 {

@@ -1,13 +1,15 @@
 <?php
 
-namespace CoreModel;
+namespace Laracore\Factory;
 
-use CoreModel\Exception\NoRepositoryToInstantiateException;
+use Illuminate\Database\Eloquent\Model;
+use Laracore\Exception\NoRepositoryToInstantiateException;
+use Laracore\Repository\RepositoryInterface;
 
-class ModelFactory
+class ModelFactory implements FactoryInterface
 {
     /**
-     * @var ModelRepository
+     * @var RepositoryInterface
      */
     protected $repository;
 
@@ -15,10 +17,10 @@ class ModelFactory
      * Retrieves a repository.
      * Fails if the repository cannot be instantiated.
      *
-     * @return ModelRepository
+     * @return RepositoryInterface
      * @throws NoRepositoryToInstantiateException
      */
-    protected function getRepository()
+    public function getRepository()
     {
         if (!isset($this->repository)) {
             $this->repository = $this->instantiateRepository();
@@ -30,9 +32,9 @@ class ModelFactory
     /**
      * Sets the repository on the factory.
      *
-     * @param ModelRepository $repository
+     * @param RepositoryInterface $repository
      */
-    public function setRepository(ModelRepository $repository)
+    public function setRepository(RepositoryInterface $repository)
     {
         $this->repository = $repository;
     }
@@ -52,24 +54,23 @@ class ModelFactory
      *
      * @param array $attributes
      * @param array $relations
-     * @return AbstractModel
+     * @return Model
      */
     public function make(array $attributes = [], array $relations = [])
     {
         $model = $this->getRepository()->newModel($attributes);
         $model = $this->setRelationsForModel($model, $relations);
-        $model->save();
-        return $model;
+        return $this->repository->save($model);
     }
 
     /**
      * Sets the relations on a model.
      *
-     * @param AbstractModel $model
+     * @param Model $model
      * @param array $relations
-     * @return AbstractModel
+     * @return Model
      */
-    protected function setRelationsForModel(AbstractModel $model, array $relations = [])
+    public function setRelationsForModel(Model $model, array $relations = [])
     {
         foreach ($relations as $key => $value) {
             $model->$key()->associate($value);
@@ -80,10 +81,10 @@ class ModelFactory
     /**
      * Instantiates the repository if it needs to be. Can be overridden.
      *
-     * @return ModelRepository
+     * @return RepositoryInterface
      * @throws NoRepositoryToInstantiateException
      */
-    protected function instantiateRepository()
+    public function instantiateRepository()
     {
         throw new NoRepositoryToInstantiateException('Can\'t instantiate repository for ModelFactory. Make sure to set repository via setRepository method.');
     }
