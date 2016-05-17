@@ -5,6 +5,7 @@ namespace Laracore\Repository;
 
 
 use Illuminate\Database\Eloquent\Model;
+use Laracore\Repository\Relation\RelationInterface;
 
 interface RepositoryInterface
 {
@@ -130,22 +131,18 @@ interface RepositoryInterface
     public function delete(Model $model);
 
     /**
-     * Sets a relation on a model.
+     * Retrieves the relation repository.
      *
-     * @param Model $model
-     * @param $relation
-     * @param $value
-     * @return Model
+     * @return RelationInterface
      */
-    public function setRelation(Model $model, $relation, $value);
+    public function getRelationRepository();
 
     /**
-     * Sets relations on a model.
+     * Sets the relation repository.
      *
-     * @param Model $model
-     * @param $relations
+     * @param RelationInterface $repository
      * @return mixed
      */
-    public function setRelations(Model $model, $relations);
+    public function setRelationRepository(RelationInterface $repository);
 
 }

@@ -3,6 +3,8 @@
 namespace Laracore\Repository;
 
 use Illuminate\Database\Eloquent\Model;
+use Laracore\Exception\RelationInterfaceExceptionNotSetException;
+use Laracore\Repository\Relation\RelationInterface;
 
 class ModelRepository implements RepositoryInterface
 {
@@ -10,6 +12,11 @@ class ModelRepository implements RepositoryInterface
      * @var Model
      */
     protected $className;
+
+    /**
+     * @var RelationInterface
+     */
+    protected $relationRepository;
 
     public function __construct($model = null)
     {
@@ -165,18 +172,20 @@ class ModelRepository implements RepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function setRelation(Model $model, $relation, $value)
+    public function getRelationRepository()
     {
-        $model->setRelation($relation, $value);
-        return $model;
+        if (!isset($this->relationRepository)) {
+            throw new RelationInterfaceExceptionNotSetException;
+        }
+
+        return $this->relationRepository;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function setRelations(Model $model, $relations)
+    public function setRelationRepository(RelationInterface $repository)
     {
-        $model->setRelations($relations);
-        return $model;
+        $this->relationRepository = $repository;
     }
 }
