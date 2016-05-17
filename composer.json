@@ -1,0 +1,14 @@
+{
+    "name": "jamesspence/core-model",
+    "description": "A laravel core model layer, with factories and repositories.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "James Spence",
+            "email": "Jamesaspence20@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {}
+}
