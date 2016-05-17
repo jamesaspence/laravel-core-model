@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Laracore\Factory;
-
 
 use Illuminate\Database\Eloquent\Model;
 use Laracore\Exception\NoRepositoryToInstantiateException;

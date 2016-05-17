@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Laracore\Repository;
-
 
 use Illuminate\Database\Eloquent\Model;
 use Laracore\Repository\Relation\RelationInterface;
