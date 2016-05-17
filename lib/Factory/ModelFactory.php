@@ -14,11 +14,7 @@ class ModelFactory implements FactoryInterface
     protected $repository;
 
     /**
-     * Retrieves a repository.
-     * Fails if the repository cannot be instantiated.
-     *
-     * @return RepositoryInterface
-     * @throws NoRepositoryToInstantiateException
+     * {@inheritdoc}
      */
     public function getRepository()
     {
@@ -30,9 +26,7 @@ class ModelFactory implements FactoryInterface
     }
 
     /**
-     * Sets the repository on the factory.
-     *
-     * @param RepositoryInterface $repository
+     * {@inheritdoc}
      */
     public function setRepository(RepositoryInterface $repository)
     {
@@ -40,9 +34,7 @@ class ModelFactory implements FactoryInterface
     }
 
     /**
-     * Sets the model on the repository.
-     *
-     * @param $className
+     * {@inheritdoc}
      */
     public function setModel($className)
     {
@@ -50,39 +42,22 @@ class ModelFactory implements FactoryInterface
     }
 
     /**
-     * Makes a new model with the attributes and relations.
-     *
-     * @param array $attributes
-     * @param array $relations
-     * @return Model
+     * {@inheritdoc}
      */
     public function make(array $attributes = [], array $relations = [])
     {
         $model = $this->getRepository()->newModel($attributes);
-        $model = $this->setRelationsForModel($model, $relations);
+
+        $model = $this
+            ->getRepository()
+            ->getRelationRepository()
+            ->associateMany($model, $relations);
+
         return $this->repository->save($model);
     }
 
     /**
-     * Sets the relations on a model.
-     *
-     * @param Model $model
-     * @param array $relations
-     * @return Model
-     */
-    public function setRelationsForModel(Model $model, array $relations = [])
-    {
-        foreach ($relations as $key => $value) {
-            $model->$key()->associate($value);
-        }
-        return $model;
-    }
-
-    /**
-     * Instantiates the repository if it needs to be. Can be overridden.
-     *
-     * @return RepositoryInterface
-     * @throws NoRepositoryToInstantiateException
+     * {@inheritdoc}
      */
     public function instantiateRepository()
     {

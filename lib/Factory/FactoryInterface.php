@@ -14,7 +14,7 @@ interface FactoryInterface
      * Retrieves a repository.
      * Fails if the repository cannot be instantiated.
      *
-     * @return ModelRepository
+     * @return RepositoryInterface
      * @throws NoRepositoryToInstantiateException
      */
     public function getRepository();
@@ -41,15 +41,6 @@ interface FactoryInterface
      * @return Model
      */
     public function make(array $attributes = [], array $relations = []);
-
-    /**
-     * Sets the relations on a model.
-     *
-     * @param Model $model
-     * @param array $relations
-     * @return Model
-     */
-    public function setRelationsForModel(Model $model, array $relations = []);
 
     /**
      * Instantiates the repository.
