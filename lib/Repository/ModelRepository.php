@@ -164,14 +164,6 @@ class ModelRepository implements RepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function delete(Model $model)
-    {
-        $model->delete();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getRelationRepository()
     {
         if (!isset($this->relationRepository)) {
@@ -187,5 +179,65 @@ class ModelRepository implements RepositoryInterface
     public function setRelationRepository(RelationInterface $repository)
     {
         $this->relationRepository = $repository;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function select($columns = '*')
+    {
+        return $this
+            ->query()
+            ->select($columns);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function update(Model $model, array $updatedValues)
+    {
+        return $this->fillAndSave($model, $updatedValues);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function delete(Model $model)
+    {
+        $model->delete();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function paginate($perPage = 10)
+    {
+        return $this
+            ->getModel()
+            ->paginate($perPage);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function whereFirst($column, $operator, $value, $with = [])
+    {
+        return $this
+            ->query()
+            ->with($with)
+            ->where($column, $operator, $value)
+            ->first();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function whereGet($column, $operator, $value, $with = [])
+    {
+        return $this
+            ->query()
+            ->with($with)
+            ->where($column, $operator, $value)
+            ->get();
     }
 }
