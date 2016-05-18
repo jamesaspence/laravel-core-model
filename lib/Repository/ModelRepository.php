@@ -226,10 +226,11 @@ class ModelRepository implements RepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function paginate($perPage = 10)
+    public function paginate($perPage = 10, $with = [])
     {
         return $this
             ->newModel()
+            ->with($with)
             ->paginate($perPage);
     }
 
