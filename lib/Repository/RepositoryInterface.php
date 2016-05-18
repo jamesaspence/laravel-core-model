@@ -192,4 +192,13 @@ interface RepositoryInterface
      * @return Collection
      */
     public function whereGet($column, $operator, $value, $with = []);
+
+    /**
+     * Loads relations on a model.
+     *
+     * @param Model $model
+     * @param array $relations
+     * @return Model
+     */
+    public function load(Model $model, $relations = []);
 }
