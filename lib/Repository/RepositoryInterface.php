@@ -2,7 +2,10 @@
 
 namespace Laracore\Repository;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Query\Builder;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Laracore\Repository\Relation\RelationInterface;
 
 interface RepositoryInterface
@@ -122,13 +125,6 @@ interface RepositoryInterface
     public function fillAndSave(Model $model, array $attributes = []);
 
     /**
-     * Deletes a model.
-     *
-     * @param Model $model
-     */
-    public function delete(Model $model);
-
-    /**
      * Retrieves the relation repository.
      *
      * @return RelationInterface
@@ -143,4 +139,67 @@ interface RepositoryInterface
      */
     public function setRelationRepository(RelationInterface $repository);
 
+    /**
+     * Creates a query builder for select.
+     *
+     * @param string $columns
+     * @return Builder
+     */
+    public function select($columns = '*');
+
+    /**
+     * Updates a model.
+     *
+     * @param Model $model
+     * @param array $updatedValues
+     * @return Model
+     */
+    public function update(Model $model, array $updatedValues);
+
+    /**
+     * Deletes a model.
+     *
+     * @param Model $model
+     */
+    public function delete(Model $model);
+
+    /**
+     * Retrieves paginated results.
+     *
+     * @param int $perPage
+     * @param mixed $with
+     * @return LengthAwarePaginator
+     */
+    public function paginate($perPage = 10, $with = []);
+
+    /**
+     * Retrieves the first result based on a single-column search.
+     *
+     * @param $column
+     * @param $operator
+     * @param $value
+     * @param mixed $with
+     * @return Model |null
+     */
+    public function whereFirst($column, $operator, $value, $with = []);
+
+    /**
+     * Retrieves a collection of results based on a single-column search.
+     *
+     * @param $column
+     * @param $operator
+     * @param $value
+     * @param mixed $with
+     * @return Collection
+     */
+    public function whereGet($column, $operator, $value, $with = []);
+
+    /**
+     * Loads relations on a model.
+     *
+     * @param Model $model
+     * @param array $relations
+     * @return Model
+     */
+    public function load(Model $model, $relations = []);
 }

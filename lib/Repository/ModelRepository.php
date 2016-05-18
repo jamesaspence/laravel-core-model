@@ -5,6 +5,7 @@ namespace Laracore\Repository;
 use Illuminate\Database\Eloquent\Model;
 use Laracore\Exception\RelationInterfaceExceptionNotSetException;
 use Laracore\Repository\Relation\RelationInterface;
+use Laracore\Repository\Relation\RelationRepository;
 
 class ModelRepository implements RepositoryInterface
 {
@@ -18,9 +19,13 @@ class ModelRepository implements RepositoryInterface
      */
     protected $relationRepository;
 
-    public function __construct($model = null)
+    public function __construct($model = null, RelationInterface $repository = null)
     {
         $this->setModel($model);
+        if (is_null($repository)) {
+            $repository = new RelationRepository();
+        }
+        $this->setRelationRepository($repository);
     }
 
     /**
@@ -44,8 +49,10 @@ class ModelRepository implements RepositoryInterface
      */
     public function find($id, $with = [])
     {
-        $class = $this->getModel();
-        return $class::with($with)->find($id);
+        return $this
+            ->newModel()
+            ->with($with)
+            ->find($id);
     }
 
     /**
@@ -53,11 +60,10 @@ class ModelRepository implements RepositoryInterface
      */
     public function findOrFail($id, $with = [])
     {
-        $class = $this->getModel();
-        /** @var AbstractModel $model */
-        $model = $class::findOrFail($id);
-        $model->load($with);
-        return $model;
+        return $this
+            ->newModel()
+            ->with($with)
+            ->findOrFail($id);
     }
 
     /**
@@ -65,8 +71,9 @@ class ModelRepository implements RepositoryInterface
      */
     public function findOrNew($id, array $columns = ['*'])
     {
-        $class = $this->getModel();
-        return $class::findOrNew($id, $columns);
+        return $this
+            ->newModel()
+            ->findOrNew($id, $columns);
     }
 
     /**
@@ -74,8 +81,9 @@ class ModelRepository implements RepositoryInterface
      */
     public function create($data)
     {
-        $class = $this->getModel();
-        return $class::create($data);
+        return $this
+            ->newModel()
+            ->create($data);
     }
 
     /**
@@ -83,10 +91,11 @@ class ModelRepository implements RepositoryInterface
      */
     public function firstOrCreate(array $attributes, $with = [])
     {
-        $class = $this->getModel();
-        $model = $class::firstOrCreate($attributes);
-        $model->load($with);
-        return $model;
+        $model =  $this
+            ->newModel()
+            ->firstOrCreate($attributes);
+
+        return $this->load($model, $with);
     }
 
     /**
@@ -94,8 +103,9 @@ class ModelRepository implements RepositoryInterface
      */
     public function firstOrNew(array $attributes)
     {
-        $class = $this->getModel();
-        return $class::firstOrNew($attributes);
+        return $this
+            ->newModel()
+            ->firstOrNew($attributes);
     }
 
     /**
@@ -103,8 +113,9 @@ class ModelRepository implements RepositoryInterface
      */
     public function all($columns = ['*'])
     {
-        $class = $this->getModel();
-        return $class::all($columns);
+        return $this
+            ->newModel()
+            ->all($columns);
     }
 
     /**
@@ -121,8 +132,9 @@ class ModelRepository implements RepositoryInterface
      */
     public function with($with = [])
     {
-        $className = $this->getModel();
-        return $className::with($with);
+        return $this
+            ->newModel()
+            ->with($with);
     }
 
     /**
@@ -130,8 +142,9 @@ class ModelRepository implements RepositoryInterface
      */
     public function query()
     {
-        $className = $this->getModel();
-        return $className::query();
+        return $this
+            ->newModel()
+            ->query();
     }
 
     /**
@@ -162,15 +175,10 @@ class ModelRepository implements RepositoryInterface
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function delete(Model $model)
-    {
-        $model->delete();
-    }
-
-    /**
-     * {@inheritdoc}
+     * Retrieves the relation repository.
+     *
+     * @return RelationRepository
+     * @throws RelationInterfaceExceptionNotSetException
      */
     public function getRelationRepository()
     {
@@ -187,5 +195,75 @@ class ModelRepository implements RepositoryInterface
     public function setRelationRepository(RelationInterface $repository)
     {
         $this->relationRepository = $repository;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function select($columns = '*')
+    {
+        return $this
+            ->query()
+            ->select($columns);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function update(Model $model, array $updatedValues)
+    {
+        return $this->fillAndSave($model, $updatedValues);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function delete(Model $model)
+    {
+        $model->delete();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function paginate($perPage = 10, $with = [])
+    {
+        return $this
+            ->newModel()
+            ->with($with)
+            ->paginate($perPage);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function whereFirst($column, $operator, $value, $with = [])
+    {
+        return $this
+            ->query()
+            ->with($with)
+            ->where($column, $operator, $value)
+            ->first();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function whereGet($column, $operator, $value, $with = [])
+    {
+        return $this
+            ->query()
+            ->with($with)
+            ->where($column, $operator, $value)
+            ->get();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function load(Model $model, $relations = [])
+    {
+        $model->load($relations);
+        return $model;
     }
 }
