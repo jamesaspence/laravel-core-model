@@ -220,9 +220,8 @@ class ModelRepository implements RepositoryInterface
      */
     public function paginate($perPage = 10)
     {
-        return $this
-            ->getModel()
-            ->paginate($perPage);
+        $class = $this->getModel();
+        return $class::paginate($perPage);
     }
 
     /**
