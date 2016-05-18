@@ -2,8 +2,10 @@
 
 namespace Laracore\Factory;
 
+use CoreModel\Exception\RelationNotBelongsToException;
 use Illuminate\Database\Eloquent\Model;
 use Laracore\Exception\NoRepositoryToInstantiateException;
+use Laracore\Repository\ModelRepository;
 use Laracore\Repository\RepositoryInterface;
 
 class ModelFactory implements FactoryInterface
@@ -14,7 +16,11 @@ class ModelFactory implements FactoryInterface
     protected $repository;
 
     /**
-     * {@inheritdoc}
+     * Retrieves a repository.
+     * Fails if the repository cannot be instantiated.
+     *
+     * @return ModelRepository
+     * @throws NoRepositoryToInstantiateException
      */
     public function getRepository()
     {
@@ -68,6 +74,9 @@ class ModelFactory implements FactoryInterface
     {
         $relationRepository = $this->getRepository()->getRelationRepository();
         foreach ($associatedRelations as $relation => $value) {
+            if (!$relationRepository->relationIsBelongsTo($model, $relation)) {
+                throw new RelationNotBelongsToException('Only BelongsTo relations can be associated via addAssociatedRelations');
+            }
             $relationRepository->associateRelation($model, $relation, $value);
         }
         if ($save) {
