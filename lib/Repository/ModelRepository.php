@@ -167,7 +167,10 @@ class ModelRepository implements RepositoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Retrieves the relation repository.
+     *
+     * @return RelationRepository
+     * @throws RelationInterfaceExceptionNotSetException
      */
     public function getRelationRepository()
     {

@@ -3,6 +3,10 @@
 namespace Laracore\Repository\Relation;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class RelationRepository implements RelationInterface
 {
@@ -127,5 +131,61 @@ class RelationRepository implements RelationInterface
         $model->$relation()->save($value, $tableAttributes);
 
         return $model;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function relationsIsA($expected, $relation)
+    {
+        return is_a($expected, $relation);
+    }
+
+    /**
+     * Checks if a relation is a BelongsTo relation.
+     *
+     * @param Model $model
+     * @param $relation
+     * @return bool
+     */
+    public function relationIsBelongsTo(Model $model, $relation)
+    {
+        return $this->relationsIsA(BelongsTo::class, $model->$relation());
+    }
+
+    /**
+     * Checks if a relation is a BelongsTo relation.
+     *
+     * @param Model $model
+     * @param $relation
+     * @return bool
+     */
+    public function relationIsBelongsToMany(Model $model, $relation)
+    {
+        return $this->relationsIsA(BelongsToMany::class, $model->$relation());
+    }
+
+    /**
+     * Checks if a relation is a BelongsTo relation.
+     *
+     * @param Model $model
+     * @param $relation
+     * @return bool
+     */
+    public function relationIsHasOne(Model $model, $relation)
+    {
+        return $this->relationsIsA(HasOne::class, $model->$relation());
+    }
+
+    /**
+     * Checks if a relation is a BelongsTo relation.
+     *
+     * @param Model $model
+     * @param $relation
+     * @return bool
+     */
+    public function relationIsHasMany(Model $model, $relation)
+    {
+        return $this->relationsIsA(HasMany::class, $model->$relation());
     }
 }
