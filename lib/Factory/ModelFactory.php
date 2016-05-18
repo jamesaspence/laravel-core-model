@@ -2,6 +2,7 @@
 
 namespace Laracore\Factory;
 
+use Illuminate\Database\Eloquent\Model;
 use Laracore\Exception\NoRepositoryToInstantiateException;
 use Laracore\Repository\RepositoryInterface;
 
@@ -43,14 +44,11 @@ class ModelFactory implements FactoryInterface
     /**
      * {@inheritdoc}
      */
-    public function make(array $attributes = [], array $relations = [])
+    public function make(array $attributes = [], array $associatedRelations = [])
     {
         $model = $this->getRepository()->newModel($attributes);
 
-        $model = $this
-            ->getRepository()
-            ->getRelationRepository()
-            ->associateMany($model, $relations);
+        $this->addAssociatedRelations($model, $associatedRelations);
 
         return $this->repository->save($model);
     }
@@ -63,4 +61,18 @@ class ModelFactory implements FactoryInterface
         throw new NoRepositoryToInstantiateException('Can\'t instantiate repository for ModelFactory. Make sure to set repository via setRepository method.');
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function addAssociatedRelations(Model $model, array $associatedRelations, $save = false)
+    {
+        $relationRepository = $this->getRepository()->getRelationRepository();
+        foreach ($associatedRelations as $relation => $value) {
+            $relationRepository->associateRelation($model, $relation, $value);
+        }
+        if ($save) {
+            $this->getRepository()->save($model);
+        }
+        return $model;
+    }
 }

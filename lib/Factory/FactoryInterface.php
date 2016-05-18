@@ -32,13 +32,25 @@ interface FactoryInterface
     public function setModel($className);
 
     /**
-     * Makes a new model with the attributes and relations.
+     * Makes a new model with attributes
      *
      * @param array $attributes
-     * @param array $relations
+     * @param array $associatedRelations
      * @return Model
      */
-    public function make(array $attributes = [], array $relations = []);
+    public function make(array $attributes = [], array $associatedRelations = []);
+
+    /**
+     * Adds the associated relations on a model.
+     * Will save and return if $save is set to true.
+     * This method should only be used for BelongsTo relations!!
+     *
+     * @param Model $model
+     * @param array $associatedRelations
+     * @param bool $save
+     * @return Model
+     */
+    public function addAssociatedRelations(Model $model, array $associatedRelations, $save = false);
 
     /**
      * Instantiates the repository.
