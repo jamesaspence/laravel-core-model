@@ -167,9 +167,10 @@ interface RepositoryInterface
      * Retrieves paginated results.
      *
      * @param int $perPage
+     * @param mixed $with
      * @return LengthAwarePaginator
      */
-    public function paginate($perPage = 10);
+    public function paginate($perPage = 10, $with = []);
 
     /**
      * Retrieves the first result based on a single-column search.
