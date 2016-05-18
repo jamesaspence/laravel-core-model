@@ -127,4 +127,13 @@ interface RelationInterface
      */
     public function save(Model $model, $relation, Model $value, $tableAttributes = []);
 
+    /**
+     * Determines if a relation is of an expected type.
+     *
+     * @param $expected
+     * @param $relation
+     * @return boolean
+     */
+    public function relationsIsA($expected, $relation);
+
 }
