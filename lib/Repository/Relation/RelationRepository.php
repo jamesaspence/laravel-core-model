@@ -146,47 +146,47 @@ class RelationRepository implements RelationInterface
      * Checks if a relation is a BelongsTo relation.
      *
      * @param Model $model
-     * @param Relation $relation
+     * @param string $relationKey - the key of the relation on the model.
      * @return bool
      */
-    public function relationIsBelongsTo(Model $model, Relation $relation)
+    public function relationIsBelongsTo(Model $model, $relationKey)
     {
-        return $this->relationsIsA($model->$relation(), BelongsTo::class);
+        return $this->relationsIsA($model->$relationKey(), BelongsTo::class);
     }
 
     /**
      * Checks if a relation is a BelongsTo relation.
      *
      * @param Model $model
-     * @param Relation $relation
+     * @param string $relationKey - the key of the relation on the model.
      * @return bool
      */
-    public function relationIsBelongsToMany(Model $model, Relation $relation)
+    public function relationIsBelongsToMany(Model $model, $relationKey)
     {
-        return $this->relationsIsA($model->$relation(), BelongsToMany::class);
+        return $this->relationsIsA($model->$relationKey(), BelongsToMany::class);
     }
 
     /**
      * Checks if a relation is a BelongsTo relation.
      *
      * @param Model $model
-     * @param Relation $relation
+     * @param string $relationKey - the key of the relation on the model.
      * @return bool
      */
-    public function relationIsHasOne(Model $model, Relation $relation)
+    public function relationIsHasOne(Model $model, $relationKey)
     {
-        return $this->relationsIsA($model->$relation(), HasOne::class);
+        return $this->relationsIsA($model->$relationKey(), HasOne::class);
     }
 
     /**
      * Checks if a relation is a BelongsTo relation.
      *
      * @param Model $model
-     * @param Relation $relation
+     * @param string $relationKey - the key of the relation on the model.
      * @return bool
      */
-    public function relationIsHasMany(Model $model, Relation $relation)
+    public function relationIsHasMany(Model $model, $relationKey)
     {
-        return $this->relationsIsA($model->$relation(), HasMany::class);
+        return $this->relationsIsA($model->$relationKey(), HasMany::class);
     }
 }
