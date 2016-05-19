@@ -6,7 +6,7 @@ fully-featured, eloquent usage.
 
 ## Installation
 
-    composer require jamesaspence/laravel-core-model
+    composer require jamesspence/core-model
 
 ## ModelRepository
 
@@ -90,13 +90,16 @@ $book = $factory->make(['stuff' => 'things']);
 ```
 The `make` method allows us to create a model and save it right away.
 
-We can also specify relations as part of the `make` method.
+We can also specify BelongsTo relations to associate with a model.
 ```php
 //Assuming we already have a $chapter model
-$book = $factory->make($attributes, [
-    'chapters' => [
-        $chapter
+$chapter = $factory->make($attributes, [
+    'book' => [
+        $book
     ]
 ]);
 ```
-This will create the model, with the relations, and save it.
+
+This will create a `Chapter` model, and associate the `Book` model on it.
+If you try any other relation type (HasMany, HasOne, etc.), the factory
+will throw a `RelationNotBelongsToException`.
