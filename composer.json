@@ -15,5 +15,13 @@
         "psr-4": {
             "Laracore\\": "lib/"
         }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^5.3"
     }
 }
