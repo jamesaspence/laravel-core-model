@@ -130,10 +130,10 @@ interface RelationInterface
     /**
      * Determines if a relation is of an expected type.
      *
+     * @param Relation $relation
      * @param $expected
-     * @param $relation
      * @return boolean
      */
-    public function relationsIsA($expected, $relation);
+    public function relationsIsA(Relation $relation, $expected);
 
 }

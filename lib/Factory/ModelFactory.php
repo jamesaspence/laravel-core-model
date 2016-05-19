@@ -2,7 +2,7 @@
 
 namespace Laracore\Factory;
 
-use CoreModel\Exception\RelationNotBelongsToException;
+use Laracore\Exception\RelationNotBelongsToException;
 use Illuminate\Database\Eloquent\Model;
 use Laracore\Exception\NoRepositoryToInstantiateException;
 use Laracore\Repository\ModelRepository;
