@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\Relation;
 
 class RelationRepository implements RelationInterface
 {
@@ -136,56 +137,56 @@ class RelationRepository implements RelationInterface
     /**
      * {@inheritdoc}
      */
-    public function relationsIsA($expected, $relation)
+    public function relationsIsA(Relation $relation, $expected)
     {
-        return is_a($expected, $relation);
+        return is_a($relation, $expected);
     }
 
     /**
      * Checks if a relation is a BelongsTo relation.
      *
      * @param Model $model
-     * @param $relation
+     * @param Relation $relation
      * @return bool
      */
-    public function relationIsBelongsTo(Model $model, $relation)
+    public function relationIsBelongsTo(Model $model, Relation $relation)
     {
-        return $this->relationsIsA(BelongsTo::class, $model->$relation());
+        return $this->relationsIsA($model->$relation(), BelongsTo::class);
     }
 
     /**
      * Checks if a relation is a BelongsTo relation.
      *
      * @param Model $model
-     * @param $relation
+     * @param Relation $relation
      * @return bool
      */
-    public function relationIsBelongsToMany(Model $model, $relation)
+    public function relationIsBelongsToMany(Model $model, Relation $relation)
     {
-        return $this->relationsIsA(BelongsToMany::class, $model->$relation());
+        return $this->relationsIsA($model->$relation(), BelongsToMany::class);
     }
 
     /**
      * Checks if a relation is a BelongsTo relation.
      *
      * @param Model $model
-     * @param $relation
+     * @param Relation $relation
      * @return bool
      */
-    public function relationIsHasOne(Model $model, $relation)
+    public function relationIsHasOne(Model $model, Relation $relation)
     {
-        return $this->relationsIsA(HasOne::class, $model->$relation());
+        return $this->relationsIsA($model->$relation(), HasOne::class);
     }
 
     /**
      * Checks if a relation is a BelongsTo relation.
      *
      * @param Model $model
-     * @param $relation
+     * @param Relation $relation
      * @return bool
      */
-    public function relationIsHasMany(Model $model, $relation)
+    public function relationIsHasMany(Model $model, Relation $relation)
     {
-        return $this->relationsIsA(HasMany::class, $model->$relation());
+        return $this->relationsIsA($model->$relation(), HasMany::class);
     }
 }

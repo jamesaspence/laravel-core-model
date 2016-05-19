@@ -4,6 +4,7 @@ namespace Laracore\Factory;
 
 use Illuminate\Database\Eloquent\Model;
 use Laracore\Exception\NoRepositoryToInstantiateException;
+use Laracore\Exception\RelationNotBelongsToException;
 use Laracore\Repository\RepositoryInterface;
 
 interface FactoryInterface
@@ -49,6 +50,7 @@ interface FactoryInterface
      * @param array $associatedRelations
      * @param bool $save
      * @return Model
+     * @throws RelationNotBelongsToException
      */
     public function addAssociatedRelations(Model $model, array $associatedRelations, $save = false);
 
