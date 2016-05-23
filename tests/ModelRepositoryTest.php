@@ -2,13 +2,15 @@
 
 namespace Tests;
 
+use Illuminate\Database\Eloquent\Model;
 use Laracore\Repository\ModelRepository;
 use Laracore\Repository\Relation\RelationInterface;
+use Mockery\Mock;
 
 class ModelRepositoryTest extends TestCase
 {
     /**
-     * @var ModelRepository
+     * @var ModelRepository|Mock
      */
     private $repository;
 
@@ -22,6 +24,12 @@ class ModelRepositoryTest extends TestCase
         $repository = \Mockery::mock(ModelRepository::class)->makePartial();
 
         $this->repository = $repository;
+    }
+
+    public function createMockModel()
+    {
+        $model = \Mockery::mock(Model::class);
+        return $model;
     }
 
     public function testSetModelAndGetModel()
@@ -40,7 +48,28 @@ class ModelRepositoryTest extends TestCase
 
     public function testFind()
     {
-        $this->stub();
+        $model = $this->createMockModel();
+
+        $withArgs = [
+            'relation', 'otherRelation.subRelation'
+        ];
+        $idArg = 1;
+        $model->shouldReceive('with')->with($withArgs)->andReturnSelf();
+        $model->shouldReceive('find')->once()->with($idArg)->andReturnSelf();
+
+        $this
+            ->repository
+            ->shouldReceive('newModel')
+            ->andReturn($model);
+
+        $result = $this->repository->find($idArg, $withArgs);
+        $this->assertInstanceOf(Model::class, $result);
+        $this->assertEquals($model, $result);
+
+        //Second test, this time for a null result
+        $model->shouldReceive('find')->andReturnNull();
+        $result = $this->repository->find($idArg, $withArgs);
+        $this->assertNull($result);
     }
 
     public function testFindOrFail()
