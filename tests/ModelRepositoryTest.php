@@ -46,6 +46,19 @@ class ModelRepositoryTest extends TestCase
         $this->assertEquals($repository, $this->repository->getRelationRepository());
     }
 
+    /**
+     * @expectedException PHPUnit_Framework_Error
+     */
+    public function testSetRelationRepositoryIncorrectClass()
+    {
+        $this->repository->setRelationRepository(null);
+    }
+
+    public function testGetModel()
+    {
+        $this->stub();
+    }
+
     public function testNewModel()
     {
         $this->stub();
