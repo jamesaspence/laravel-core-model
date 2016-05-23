@@ -54,13 +54,10 @@ class ModelRepositoryTest extends TestCase
         $this->repository->setRelationRepository(null);
     }
 
-    public function testGetModel()
-    {
-        $this->stub();
-    }
-
     public function testNewModel()
     {
-        $this->stub();
+        $this->repository->setModel($this->createMockModel());
+        $result = $this->repository->newModel();
+        $this->assertInstanceOf(Model::class, $result);
     }
 }
