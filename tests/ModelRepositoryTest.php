@@ -48,6 +48,8 @@ class ModelRepositoryTest extends TestCase
 
     public function testNewModel()
     {
+        
+        //set a class as a model
         $this->stub();
     }
 }
