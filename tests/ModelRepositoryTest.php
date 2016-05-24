@@ -269,11 +269,13 @@ class ModelRepositoryTest extends TestCase
         $model
             ->shouldReceive('fill')
             ->once();
-        $model
-            ->shouldReceive('save')
-            ->once();
 
-        $this->repository->fill($model);
+        $this->repository
+            ->shouldReceive('save')
+            ->once()
+            ->andReturn($model);
+
+        $this->repository->fillAndSave($model);
     }
 
     public function testSelect()
