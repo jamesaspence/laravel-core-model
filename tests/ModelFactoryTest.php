@@ -51,6 +51,43 @@ class ModelFactoryTest extends TestCase
         $this->factory->instantiateRepository();
     }
 
+    public function testMake()
+    {
+        $attributes = [
+            'stuff' => 'things'
+        ];
+
+        $associatedRelations = [
+            'relation' => \Mockery::mock(Model::class)
+        ];
+
+        $model = \Mockery::mock(Model::class);
+
+        $repository = \Mockery::mock(ModelRepository::class);
+        $repository
+            ->shouldReceive('newModel')
+            ->with($attributes)
+            ->andReturn($model);
+
+        $repository
+            ->shouldReceive('save')
+            ->with($model)
+            ->once();
+
+        $this
+            ->factory
+            ->shouldReceive('getRepository')
+            ->andReturn($repository);
+
+        $this
+            ->factory
+            ->shouldReceive('addAssociatedRelations')
+            ->with($model, $associatedRelations)
+            ->once();
+
+        $this->factory->make($attributes, $associatedRelations);
+    }
+
     /**
      * @expectedException \Laracore\Exception\RelationNotBelongsToException
      */
