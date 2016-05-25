@@ -29,9 +29,14 @@ class RelationRepositoryTest extends TestCase
         $this->relationRepository = $repository;
     }
 
+    public function createMockModel()
+    {
+        return \Mockery::mock(Model::class);
+    }
+
     public function testSetRelation()
     {
-        $model = \Mockery::mock(Model::class);
+        $model = $this->createMockModel();
         $model->shouldReceive('setRelation')
             ->once()
             ->andReturnSelf();
@@ -43,7 +48,7 @@ class RelationRepositoryTest extends TestCase
     
     public function testSetRelations()
     {
-        $model = \Mockery::mock(Model::class);
+        $model = $this->createMockModel();
         $model->shouldReceive('setRelations')
             ->once()
             ->andReturnSelf();
@@ -55,7 +60,7 @@ class RelationRepositoryTest extends TestCase
 
     public function testSetTouchedRelations()
     {
-        $model = \Mockery::mock(Model::class);
+        $model = $this->createMockModel();
         $model->shouldReceive('setTouchedRelations')
             ->once()
             ->andReturnSelf();
