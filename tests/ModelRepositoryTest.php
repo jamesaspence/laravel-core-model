@@ -7,6 +7,7 @@ use Laracore\Repository\ModelRepository;
 use Laracore\Repository\Relation\RelationInterface;
 use Mockery\Mock;
 use Mockery\MockInterface;
+use Tests\Stub\ModelStub;
 
 class ModelRepositoryTest extends TestCase
 {
@@ -77,9 +78,15 @@ class ModelRepositoryTest extends TestCase
 
     public function testNewModel()
     {
-        $this->repository->setModel($this->createMockModel());
-        $result = $this->repository->newModel();
-        $this->assertInstanceOf(Model::class, $result);
+        $this->repository->setModel(ModelStub::class);
+        $model = $this->repository->newModel([
+            'stuff' => 'things'
+        ]);
+
+        $this->assertInstanceOf(ModelStub::class, $model);
+        $data = $model->getAttributes();
+        $this->assertArrayHasKey('stuff', $data);
+        $this->assertTrue($data['stuff'] == 'things');
     }
 
     public function testLoad()
