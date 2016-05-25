@@ -203,7 +203,7 @@ class ModelRepository implements RepositoryInterface
     public function select($columns = '*')
     {
         return $this
-            ->query()
+            ->newModel()
             ->select($columns);
     }
 
@@ -240,7 +240,7 @@ class ModelRepository implements RepositoryInterface
     public function whereFirst($column, $operator, $value, $with = [])
     {
         return $this
-            ->query()
+            ->newModel()
             ->with($with)
             ->where($column, $operator, $value)
             ->first();
@@ -252,7 +252,7 @@ class ModelRepository implements RepositoryInterface
     public function whereGet($column, $operator, $value, $with = [])
     {
         return $this
-            ->query()
+            ->newModel()
             ->with($with)
             ->where($column, $operator, $value)
             ->get();

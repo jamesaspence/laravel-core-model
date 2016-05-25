@@ -25,7 +25,7 @@ interface RelationInterface
      * @param $relations
      * @return Model
      */
-    public function setRelations(Model $model, $relations);
+    public function setRelations(Model $model, array $relations);
 
     /**
      * Sets touched relations on a model.
@@ -34,7 +34,7 @@ interface RelationInterface
      * @param array $touches
      * @return mixed
      */
-    public function setTouchedRelations(Model $model, $touches = []);
+    public function setTouchedRelations(Model $model, array $touches = []);
 
     /**
      * Associates a model with a relation.

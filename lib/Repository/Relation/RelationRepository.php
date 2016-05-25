@@ -25,7 +25,7 @@ class RelationRepository implements RelationInterface
     /**
      * {@inheritdoc}
      */
-    public function setRelations(Model $model, $relations)
+    public function setRelations(Model $model, array $relations)
     {
         $model->setRelations($relations);
 
@@ -35,7 +35,7 @@ class RelationRepository implements RelationInterface
     /**
      * {@inheritdoc}
      */
-    public function setTouchedRelations(Model $model, $touches = [])
+    public function setTouchedRelations(Model $model, array $touches = [])
     {
         $model->setTouchedRelations($touches);
 
