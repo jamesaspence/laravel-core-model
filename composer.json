@@ -10,7 +10,12 @@
         }
     ],
     "minimum-stability": "stable",
-    "require": {},
+    "require": {
+        "illuminate/database": "^5.2"
+    },
+    "suggest": {
+        "illuminate/pagination": "(Required to paginate the result set (5.2.*).)"
+    },
     "autoload": {
         "psr-4": {
             "Laracore\\": "lib/"
