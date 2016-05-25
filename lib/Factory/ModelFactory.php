@@ -25,7 +25,7 @@ class ModelFactory implements FactoryInterface
     public function getRepository()
     {
         if (!isset($this->repository)) {
-            $this->repository = $this->instantiateRepository();
+            $this->setRepository($this->instantiateRepository());
         }
 
         return $this->repository;
@@ -44,7 +44,7 @@ class ModelFactory implements FactoryInterface
      */
     public function setModel($className)
     {
-        $this->repository->setModel($className);
+        $this->getRepository()->setModel($className);
     }
 
     /**
@@ -56,7 +56,7 @@ class ModelFactory implements FactoryInterface
 
         $this->addAssociatedRelations($model, $associatedRelations);
 
-        return $this->repository->save($model);
+        return $this->getRepository()->save($model);
     }
 
     /**
