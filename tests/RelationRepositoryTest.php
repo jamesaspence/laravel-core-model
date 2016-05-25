@@ -55,23 +55,28 @@ class RelationRepositoryTest extends TestCase
     public function testSetRelations()
     {
         $model = $this->createMockModel();
+        $relations = [
+            'relation' => $this->createMockModel()
+        ];
         $model->shouldReceive('setRelations')
-            ->once()
-            ->andReturnSelf();
+            ->with($relations)
+            ->once();
 
-        $result = $this->relationRepository->setRelations($model, 'stuff');
-
-        $this->assertInstanceOf(Model::class, $result);
+        $this->relationRepository->setRelations($model, $relations);
     }
 
     public function testSetTouchedRelations()
     {
         $model = $this->createMockModel();
+        $relations = [
+            'relation'
+        ];
         $model->shouldReceive('setTouchedRelations')
+            ->with($relations)
             ->once()
             ->andReturnSelf();
 
-        $result = $this->relationRepository->setTouchedRelations($model, 'stuff');
+        $result = $this->relationRepository->setTouchedRelations($model, $relations);
         $this->assertInstanceOf(Model::class, $result);
     }
 
