@@ -150,9 +150,9 @@ class ModelRepository implements RepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function save(Model $model)
+    public function save(Model $model, array $options = [])
     {
-        $model->save();
+        $model->save($options);
         return $model;
     }
 

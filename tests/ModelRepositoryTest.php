@@ -250,12 +250,16 @@ class ModelRepositoryTest extends TestCase
     public function testSave()
     {
         $model = $this->createMockModel();
+        $options = [
+            'stuff' => 'things'
+        ];
 
         $model
             ->shouldReceive('save')
+            ->with($options)
             ->once();
 
-        $this->repository->save($model);
+        $this->repository->save($model, $options);
     }
 
     public function testFill()
