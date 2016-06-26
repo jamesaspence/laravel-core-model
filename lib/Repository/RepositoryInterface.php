@@ -102,9 +102,10 @@ interface RepositoryInterface
      * Saves a model.
      *
      * @param Model $model
+     * @param array $options
      * @return Model
      */
-    public function save(Model $model);
+    public function save(Model $model, array $options = []);
 
     /**
      * Fills a model with attributes.
