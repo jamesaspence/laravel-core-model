@@ -87,14 +87,14 @@ interface RepositoryInterface
 
     /**
      * @param array $with
-     * @return \Illuminate\Database\Query\Builder
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function with($with = []);
 
     /**
      * Creates a query builder instance, and returns it.
      *
-     * @return \Illuminate\Database\Query\Builder
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function query();
 
