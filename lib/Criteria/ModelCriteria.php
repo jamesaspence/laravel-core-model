@@ -69,7 +69,7 @@ class ModelCriteria implements CriteriaInterface
     /**
      * {@inheritdoc}
      */
-    public function persistent($status = true)
+    public function persist($status = true)
     {
         $this->persistent = $status;
         return $this;

@@ -54,7 +54,7 @@ interface CriteriaInterface
      * @param bool $status
      * @return static
      */
-    public function persistent($status = true);
+    public function persist($status = true);
 
     /**
      * Checks if the criteria is meant to persist.
