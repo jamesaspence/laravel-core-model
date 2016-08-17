@@ -95,7 +95,7 @@ class CriteriaBag
             }
         }
 
-        return $count;
+        return $count > 0;
     }
 
 }
