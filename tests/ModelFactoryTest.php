@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: trentrogers
- * Date: 5/23/16
- * Time: 1:55 PM
- */
 
 namespace Laracore\Tests;
 
