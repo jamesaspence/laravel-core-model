@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests;
+namespace Laracore\Tests;
 
 class TestCase extends \PHPUnit_Framework_TestCase
 {
