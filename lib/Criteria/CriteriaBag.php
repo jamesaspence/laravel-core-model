@@ -15,10 +15,12 @@ class CriteriaBag
      * Adds a criteria to the bag.
      *
      * @param CriteriaInterface $criteria
+     * @return static
      */
     public function add(CriteriaInterface $criteria)
     {
         $this->criteria[] = $criteria;
+        return $this;
     }
 
     /**
