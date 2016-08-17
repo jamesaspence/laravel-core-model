@@ -1,13 +1,13 @@
 <?php
 
-namespace Tests;
+namespace Laracore\Tests;
 
 use Illuminate\Database\Eloquent\Model;
 use Laracore\Repository\ModelRepository;
 use Laracore\Repository\Relation\RelationInterface;
 use Mockery\Mock;
 use Mockery\MockInterface;
-use Tests\Stub\ModelStub;
+use Laracore\Tests\Stub\ModelStub;
 
 class ModelRepositoryTest extends TestCase
 {
@@ -66,14 +66,6 @@ class ModelRepositoryTest extends TestCase
     public function testGetRelationRepositoryNoRepositorySet()
     {
         $this->repository->getRelationRepository();
-    }
-
-    /**
-     * @expectedException PHPUnit_Framework_Error
-     */
-    public function testSetRelationRepositoryIncorrectClass()
-    {
-        $this->repository->setRelationRepository(null);
     }
 
     public function testNewModel()

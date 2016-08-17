@@ -4,7 +4,7 @@ namespace Laracore\Repository;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Query\Builder;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Laracore\Repository\Relation\RelationInterface;
 
@@ -87,14 +87,14 @@ interface RepositoryInterface
 
     /**
      * @param array $with
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return Builder
      */
     public function with($with = []);
 
     /**
      * Creates a query builder instance, and returns it.
      *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return Builder
      */
     public function query();
 

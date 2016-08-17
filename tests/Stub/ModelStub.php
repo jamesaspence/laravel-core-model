@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Stub;
+namespace Laracore\Tests\Stub;
 
 use Illuminate\Database\Eloquent\Model;
 
