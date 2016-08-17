@@ -6,15 +6,12 @@
  * Time: 1:55 PM
  */
 
-namespace Tests;
+namespace Laracore\Tests;
 
 
-use Laracore\Factory\FactoryInterface;
 use Laracore\Repository\ModelRepository;
 use Laracore\Repository\RepositoryInterface;
 use Laracore\Factory\ModelFactory;
-use Laracore\Exception\NoRepositoryToInstantiateException;
-use Laracore\Exception\RelationNotBelongsToException;
 use Mockery\Mock;
 use Illuminate\Database\Eloquent\Model;
 

@@ -6,7 +6,7 @@
  * Time: 12:54 PM
  */
 
-namespace Tests;
+namespace Laracore\Tests;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\Relation;
