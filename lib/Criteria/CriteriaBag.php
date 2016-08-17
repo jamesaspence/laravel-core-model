@@ -9,7 +9,7 @@ class CriteriaBag
     /**
      * @var CriteriaInterface[]
      */
-    protected $criteria;
+    protected $criteria = [];
 
     /**
      * Adds a criteria to the bag.
