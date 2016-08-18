@@ -15,6 +15,16 @@ class ModelCriteria implements CriteriaInterface
 
     private $closure;
 
+    public function __construct(\Closure $closure = null, $skips = false, $persists = false)
+    {
+        if (!is_null($closure)) {
+            $this->setClosure($closure);
+        }
+
+        $this->skip($skips);
+        $this->persist($persists);
+    }
+
     /**
      * {@inheritdoc}
      */

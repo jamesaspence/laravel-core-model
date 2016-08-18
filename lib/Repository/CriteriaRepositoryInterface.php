@@ -49,4 +49,11 @@ interface CriteriaRepositoryInterface
      */
     public function applyCriteria($model);
 
+    /**
+     * Retrieves the default criteria on the class.
+     *
+     * @return CriteriaBag
+     */
+    public function getDefaultCriteria();
+
 }

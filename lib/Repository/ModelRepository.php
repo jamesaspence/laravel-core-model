@@ -3,12 +3,19 @@
 namespace Laracore\Repository;
 
 use Illuminate\Database\Eloquent\Model;
+use Laracore\Criteria\CriteriaBag;
+use Laracore\Criteria\CriteriaInterface;
 use Laracore\Exception\RelationInterfaceExceptionNotSetException;
 use Laracore\Repository\Relation\RelationInterface;
 use Laracore\Repository\Relation\RelationRepository;
 
-class ModelRepository implements RepositoryInterface
+class ModelRepository implements RepositoryInterface, CriteriaRepositoryInterface
 {
+    /**
+     * @var CriteriaBag
+     */
+    private $criteria;
+
     /**
      * @var Model
      */
@@ -21,6 +28,7 @@ class ModelRepository implements RepositoryInterface
 
     public function __construct($model = null, RelationInterface $repository = null)
     {
+        $this->setCriteriaBag($this->getDefaultCriteria());
         $this->setModel($model);
         if (is_null($repository)) {
             $repository = new RelationRepository();
@@ -42,6 +50,16 @@ class ModelRepository implements RepositoryInterface
     public function getModel()
     {
         return $this->className;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setAttribute(Model $model, $key, $value)
+    {
+        $model->$key = $value;
+
+        return $model;
     }
 
     /**
@@ -152,7 +170,7 @@ class ModelRepository implements RepositoryInterface
     public function newModel(array $attrs = [])
     {
         $className = $this->getModel();
-        return new $className($attrs);
+        return $this->applyCriteria(new $className($attrs));
     }
 
     /**
@@ -321,6 +339,68 @@ class ModelRepository implements RepositoryInterface
      */
     public function postQuery()
     {
+        $this->clearCriteria();
         return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCriteriaBag(CriteriaBag $bag)
+    {
+        $this->criteria = $bag;
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function addCriteria(CriteriaInterface $criteria)
+    {
+        $this->getCriteria()->add($criteria);
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCriteria()
+    {
+        if (!$this->criteria instanceof CriteriaBag) {
+            $this->criteria = new CriteriaBag();
+        }
+
+        return $this->criteria;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function clearCriteria($clearPersistent = false)
+    {
+        if ($clearPersistent) {
+            $this->getCriteria()->clear();
+        } else {
+            $this->getCriteria()->clearNonPersistent();
+        }
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function applyCriteria($model)
+    {
+        $model = $this->getCriteria()->applyAll($model);
+        return $model;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDefaultCriteria()
+    {
+        return new CriteriaBag();
     }
 }

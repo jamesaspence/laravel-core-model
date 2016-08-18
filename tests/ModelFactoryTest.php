@@ -57,8 +57,12 @@ class ModelFactoryTest extends TestCase
         $repository = \Mockery::mock(ModelRepository::class);
         $repository
             ->shouldReceive('newModel')
-            ->with($attributes)
+            ->once()
             ->andReturn($model);
+
+        $repository
+            ->shouldReceive('setAttribute')
+            ->times(count($attributes));
 
         $repository
             ->shouldReceive('save')
