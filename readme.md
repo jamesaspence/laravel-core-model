@@ -149,11 +149,6 @@ $user = $factory->make([
 ```
 This will save the model with the attributes specified.
 
-####NOTE
-
-Ensure your model sets the `fillable` property, since 
-`ModelFactory` uses mass assignment.
-
 You can also use the `ModelFactory` to save `BelongsTo` 
 relations:
 
