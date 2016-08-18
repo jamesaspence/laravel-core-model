@@ -49,4 +49,11 @@ interface CriteriaRepositoryInterface
      */
     public function applyCriteria($model);
 
+    /**
+     * Sets the default criteria on the class.
+     *
+     * @return static
+     */
+    public function setDefaultCriteria();
+
 }
