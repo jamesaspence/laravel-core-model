@@ -126,15 +126,11 @@ class CriteriaModelRepositoryTest extends TestCase
         $this->assertEquals($result, $model);
     }
 
-    public function testSetDefaultCriteria()
+    public function testGetDefaultCriteria()
     {
         $repository = $this->getRepository();
 
-        $repository
-            ->shouldReceive('setCriteriaBag')
-            ->once();
-
-        $repository->setDefaultCriteria();
+        $this->assertInstanceOf(CriteriaBag::class, $repository->getDefaultCriteria());
     }
 
 }
