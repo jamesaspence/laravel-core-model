@@ -403,13 +403,4 @@ class ModelRepositoryTest extends TestCase
 
         $this->repository->whereGet($column, $operator, $value, $with);
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function tearDown()
-    {
-        parent::tearDown();
-        \Mockery::close();
-    }
 }
