@@ -25,6 +25,16 @@ interface RepositoryInterface
     public function getModel();
 
     /**
+     * Sets an attribute on the model.
+     *
+     * @param Model $model
+     * @param $key
+     * @param $value
+     * @return Model
+     */
+    public function setAttribute(Model $model, $key, $value);
+
+    /**
      * Finds a model by its ID.
      * @param $id
      * @param array $with

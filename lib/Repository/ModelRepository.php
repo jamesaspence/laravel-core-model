@@ -55,6 +55,16 @@ class ModelRepository implements RepositoryInterface, CriteriaRepositoryInterfac
     /**
      * {@inheritdoc}
      */
+    public function setAttribute(Model $model, $key, $value)
+    {
+        $model->$key = $value;
+
+        return $model;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function find($id, $with = [])
     {
         $result = $this

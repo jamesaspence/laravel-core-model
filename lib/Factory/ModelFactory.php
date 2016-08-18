@@ -11,6 +11,13 @@ use Laracore\Repository\RepositoryInterface;
 class ModelFactory implements FactoryInterface
 {
     /**
+     * Sets whether or not to use mass assignment during creation of models.
+     *
+     * @var bool
+     */
+    protected $massAssign = false;
+
+    /**
      * @var RepositoryInterface
      */
     protected $repository;
@@ -52,7 +59,17 @@ class ModelFactory implements FactoryInterface
      */
     public function make(array $attributes = [], array $associatedRelations = [])
     {
-        $model = $this->getRepository()->newModel($attributes);
+        $repository = $this->getRepository();
+
+        $model = $repository->newModel();
+
+        if ($this->massAssign) {
+            $repository->fill($model, $attributes);
+        } else {
+            foreach ($attributes as $key => $value) {
+                $repository->setAttribute($model, $key, $value);
+            }
+        }
 
         $this->addAssociatedRelations($model, $associatedRelations);
 
