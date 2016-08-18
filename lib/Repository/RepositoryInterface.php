@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Laracore\Criteria\CriteriaInterface;
 use Laracore\Repository\Relation\RelationInterface;
 
 interface RepositoryInterface
@@ -22,6 +23,16 @@ interface RepositoryInterface
      * @return Model
      */
     public function getModel();
+
+    /**
+     * Sets an attribute on the model.
+     *
+     * @param Model $model
+     * @param $key
+     * @param $value
+     * @return Model
+     */
+    public function setAttribute(Model $model, $key, $value);
 
     /**
      * Finds a model by its ID.
@@ -203,4 +214,11 @@ interface RepositoryInterface
      * @return Model
      */
     public function load(Model $model, $relations = []);
+
+    /**
+     * Cleans up after the query is finished, if desired.
+     *
+     * @return static
+     */
+    public function postQuery();
 }

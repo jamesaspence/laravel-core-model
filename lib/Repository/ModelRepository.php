@@ -3,12 +3,19 @@
 namespace Laracore\Repository;
 
 use Illuminate\Database\Eloquent\Model;
+use Laracore\Criteria\CriteriaBag;
+use Laracore\Criteria\CriteriaInterface;
 use Laracore\Exception\RelationInterfaceExceptionNotSetException;
 use Laracore\Repository\Relation\RelationInterface;
 use Laracore\Repository\Relation\RelationRepository;
 
-class ModelRepository implements RepositoryInterface
+class ModelRepository implements RepositoryInterface, CriteriaRepositoryInterface
 {
+    /**
+     * @var CriteriaBag
+     */
+    private $criteria;
+
     /**
      * @var Model
      */
@@ -21,6 +28,7 @@ class ModelRepository implements RepositoryInterface
 
     public function __construct($model = null, RelationInterface $repository = null)
     {
+        $this->setCriteriaBag($this->getDefaultCriteria());
         $this->setModel($model);
         if (is_null($repository)) {
             $repository = new RelationRepository();
@@ -47,12 +55,26 @@ class ModelRepository implements RepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function setAttribute(Model $model, $key, $value)
+    {
+        $model->$key = $value;
+
+        return $model;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function find($id, $with = [])
     {
-        return $this
+        $result = $this
             ->newModel()
             ->with($with)
             ->find($id);
+
+        $this->postQuery();
+
+        return $result;
     }
 
     /**
@@ -60,10 +82,14 @@ class ModelRepository implements RepositoryInterface
      */
     public function findOrFail($id, $with = [])
     {
-        return $this
+        $result = $this
             ->newModel()
             ->with($with)
             ->findOrFail($id);
+
+        $this->postQuery();
+
+        return $result;
     }
 
     /**
@@ -71,9 +97,13 @@ class ModelRepository implements RepositoryInterface
      */
     public function findOrNew($id, array $columns = ['*'])
     {
-        return $this
+        $result = $this
             ->newModel()
             ->findOrNew($id, $columns);
+
+        $this->postQuery();
+
+        return $result;
     }
 
     /**
@@ -81,9 +111,13 @@ class ModelRepository implements RepositoryInterface
      */
     public function create($data)
     {
-        return $this
+        $result = $this
             ->newModel()
             ->create($data);
+
+        $this->postQuery();
+
+        return $result;
     }
 
     /**
@@ -91,11 +125,15 @@ class ModelRepository implements RepositoryInterface
      */
     public function firstOrCreate(array $attributes, $with = [])
     {
-        $model =  $this
+        $model = $this
             ->newModel()
             ->firstOrCreate($attributes);
 
-        return $this->load($model, $with);
+        $this->postQuery();
+
+        $result = $this->load($model, $with);
+
+        return $result;
     }
 
     /**
@@ -103,9 +141,13 @@ class ModelRepository implements RepositoryInterface
      */
     public function firstOrNew(array $attributes)
     {
-        return $this
+        $result = $this
             ->newModel()
             ->firstOrNew($attributes);
+
+        $this->postQuery();
+
+        return $result;
     }
 
     /**
@@ -113,9 +155,13 @@ class ModelRepository implements RepositoryInterface
      */
     public function all($columns = ['*'])
     {
-        return $this
+        $result = $this
             ->newModel()
             ->all($columns);
+
+        $this->postQuery();
+
+        return $result;
     }
 
     /**
@@ -124,7 +170,7 @@ class ModelRepository implements RepositoryInterface
     public function newModel(array $attrs = [])
     {
         $className = $this->getModel();
-        return new $className($attrs);
+        return $this->applyCriteria(new $className($attrs));
     }
 
     /**
@@ -132,9 +178,13 @@ class ModelRepository implements RepositoryInterface
      */
     public function with($with = [])
     {
-        return $this
+        $result = $this
             ->newModel()
             ->with($with);
+
+        $this->postQuery();
+
+        return $result;
     }
 
     /**
@@ -142,9 +192,13 @@ class ModelRepository implements RepositoryInterface
      */
     public function query()
     {
-        return $this
+        $result = $this
             ->newModel()
             ->query();
+
+        $this->postQuery();
+
+        return $result;
     }
 
     /**
@@ -175,10 +229,7 @@ class ModelRepository implements RepositoryInterface
     }
 
     /**
-     * Retrieves the relation repository.
-     *
-     * @return RelationRepository
-     * @throws RelationInterfaceExceptionNotSetException
+     * {@inheritdoc}
      */
     public function getRelationRepository()
     {
@@ -202,9 +253,13 @@ class ModelRepository implements RepositoryInterface
      */
     public function select($columns = '*')
     {
-        return $this
+        $result = $this
             ->newModel()
             ->select($columns);
+
+        $this->postQuery();
+
+        return $result;
     }
 
     /**
@@ -228,10 +283,14 @@ class ModelRepository implements RepositoryInterface
      */
     public function paginate($perPage = 10, $with = [])
     {
-        return $this
+        $result = $this
             ->newModel()
             ->with($with)
             ->paginate($perPage);
+
+        $this->postQuery();
+
+        return $result;
     }
 
     /**
@@ -239,11 +298,15 @@ class ModelRepository implements RepositoryInterface
      */
     public function whereFirst($column, $operator, $value, $with = [])
     {
-        return $this
+        $result = $this
             ->newModel()
             ->with($with)
             ->where($column, $operator, $value)
             ->first();
+
+        $this->postQuery();
+
+        return $result;
     }
 
     /**
@@ -251,11 +314,15 @@ class ModelRepository implements RepositoryInterface
      */
     public function whereGet($column, $operator, $value, $with = [])
     {
-        return $this
+        $result = $this
             ->newModel()
             ->with($with)
             ->where($column, $operator, $value)
             ->get();
+
+        $this->postQuery();
+
+        return $result;
     }
 
     /**
@@ -265,5 +332,75 @@ class ModelRepository implements RepositoryInterface
     {
         $model->load($relations);
         return $model;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function postQuery()
+    {
+        $this->clearCriteria();
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCriteriaBag(CriteriaBag $bag)
+    {
+        $this->criteria = $bag;
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function addCriteria(CriteriaInterface $criteria)
+    {
+        $this->getCriteria()->add($criteria);
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCriteria()
+    {
+        if (!$this->criteria instanceof CriteriaBag) {
+            $this->criteria = new CriteriaBag();
+        }
+
+        return $this->criteria;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function clearCriteria($clearPersistent = false)
+    {
+        if ($clearPersistent) {
+            $this->getCriteria()->clear();
+        } else {
+            $this->getCriteria()->clearNonPersistent();
+        }
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function applyCriteria($model)
+    {
+        $model = $this->getCriteria()->applyAll($model);
+        return $model;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDefaultCriteria()
+    {
+        return new CriteriaBag();
     }
 }
