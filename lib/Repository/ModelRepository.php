@@ -28,7 +28,7 @@ class ModelRepository implements RepositoryInterface, CriteriaRepositoryInterfac
 
     public function __construct($model = null, RelationInterface $repository = null)
     {
-        $this->setDefaultCriteria();
+        $this->setCriteriaBag($this->getDefaultCriteria());
         $this->setModel($model);
         if (is_null($repository)) {
             $repository = new RelationRepository();
@@ -389,9 +389,8 @@ class ModelRepository implements RepositoryInterface, CriteriaRepositoryInterfac
     /**
      * {@inheritdoc}
      */
-    public function setDefaultCriteria()
+    public function getDefaultCriteria()
     {
-        $this->setCriteriaBag(new CriteriaBag());
-        return $this;
+        return new CriteriaBag();
     }
 }

@@ -50,10 +50,10 @@ interface CriteriaRepositoryInterface
     public function applyCriteria($model);
 
     /**
-     * Sets the default criteria on the class.
+     * Retrieves the default criteria on the class.
      *
-     * @return static
+     * @return CriteriaBag
      */
-    public function setDefaultCriteria();
+    public function getDefaultCriteria();
 
 }
