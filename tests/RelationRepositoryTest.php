@@ -265,10 +265,4 @@ class RelationRepositoryTest extends TestCase
         //Test for failure too
         $this->assertFalse($this->relationRepository->relationsIsA($relation, BelongsTo::class));
     }
-
-    public function tearDown()
-    {
-        parent::tearDown();
-        \Mockery::close();
-    }
 }
