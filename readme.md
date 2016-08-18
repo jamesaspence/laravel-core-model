@@ -203,9 +203,7 @@ public function controllerMethod(UserRepository $repository)
 
 Laracore now supports custom criteria. 
 Criteria serve as a convenient way to 
-build consistent queries. To have access 
-to Criteria, you will need to use 
-`CriteriaModelRepository` instead of `ModelRepository`.
+build consistent queries.
 
 ####Examples
 
@@ -221,7 +219,7 @@ $criteria->setClosure(function ($model) {
 Applying a criteria:
 
 ```php
-$repository = new CriteriaModelRepository(User::class);
+$repository = new ModelRepository(User::class);
 $repository->addCriteria($criteria);
 
 //This will search for both an email AND name
