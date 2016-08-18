@@ -6,7 +6,7 @@ namespace Laracore\Tests\Criteria;
 
 use Laracore\Criteria\CriteriaBag;
 use Laracore\Criteria\CriteriaInterface;
-use Laracore\Repository\CriteriaModelRepository;
+use Laracore\Repository\ModelRepository;
 use Laracore\Tests\Stub\ModelStub;
 use Laracore\Tests\TestCase;
 
@@ -15,7 +15,7 @@ class CriteriaModelRepositoryTest extends TestCase
 
     public function getRepository()
     {
-        return \Mockery::mock(CriteriaModelRepository::class)->makePartial();
+        return \Mockery::mock(ModelRepository::class)->makePartial();
     }
 
     public function getMockCriteriaBag()
