@@ -240,7 +240,7 @@ class UserRepository extends ModelRepository
         
         $criteriaBag->addCriteria($criteria);
         
-        return $criteria;
+        return $criteriaBag;
     }
 }
 ```
@@ -260,3 +260,16 @@ This will perform the following query (if using MySQL):
 SELECT * FROM `users` WHERE `name` = ? AND `id` = ?
 ```
 with the two bound parameters of 'Test' and '1'.
+
+##Future Plans
+Short term, the plan is to keep this library compatible with major 
+versions of Laravel > 5. That means testing for new versions and 
+adding new methods that exist in newer versions.
+
+I would love to add non-eloquent support to this repository. 
+The plan is to add both raw query as well as Doctrine repositories, 
+but that isn't coming quite yet.
+
+Long-term plans are a little more unclear. After non-eloquent support,
+I will probably decide on my next feature to implement. If you have any
+ideas, I would love to hear them!
