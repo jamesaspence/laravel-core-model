@@ -240,7 +240,7 @@ class UserRepository extends ModelRepository
         
         $criteriaBag->addCriteria($criteria);
         
-        return $criteria;
+        return $criteriaBag;
     }
 }
 ```
