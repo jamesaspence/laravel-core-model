@@ -5,6 +5,23 @@ providing a convenient repository interface that still allows
 fully-featured, eloquent usage. Allows convenient testing and 
 dependency injection without sacrificing features or versatility.
 
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [Requirements](#requirements)
+- [Installation](#installation)
+- [Usage](#usage)
+  - [Relations](#relations)
+  - [Dependency Injection](#dependency-injection)
+  - [Model Factories](#model-factories)
+  - [Criteria](#criteria)
+    - [Examples](#examples)
+  - [Inheritance](#inheritance)
+- [Future Plans](#future-plans)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 ## Requirements
 
 - Laravel 5+ or Illuminate\Database 5+ (tested up to 5.2)
@@ -160,13 +177,13 @@ $user = $factory->make([
 ]);
 ```
 
-###Criteria
+### Criteria
 
 Laracore now supports custom criteria. 
 Criteria serve as a convenient way to 
 build consistent queries.
 
-####Examples
+#### Examples
 
 Setting a criteria:
 
@@ -261,7 +278,7 @@ SELECT * FROM `users` WHERE `name` = ? AND `id` = ?
 ```
 with the two bound parameters of 'Test' and '1'.
 
-##Future Plans
+## Future Plans
 Short term, the plan is to keep this library compatible with major 
 versions of Laravel > 5. That means testing for new versions and 
 adding new methods that exist in newer versions.
