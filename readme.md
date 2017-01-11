@@ -29,7 +29,7 @@ dependency injection without sacrificing features or versatility.
 
 ## Installation
 
-    composer require jamesspence/core-model
+    composer require jamesaspence/core-model
 
 ## Usage
 
