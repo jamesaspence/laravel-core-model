@@ -1,5 +1,5 @@
 {
-    "name": "jamesspence/core-model",
+    "name": "jamesaspence/core-model",
     "description": "A laravel core model layer, with factories and repositories.",
     "type": "library",
     "license": "MIT",
