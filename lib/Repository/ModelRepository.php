@@ -118,9 +118,13 @@ class ModelRepository implements RepositoryInterface
      */
     public function firstOrCreate(array $attributes, $with = [])
     {
-        return $this
+        $model = $this
             ->newModel()
             ->firstOrCreate($attributes);
+
+        $this->load($model, $with);
+
+        return $model;
     }
 
     /**
