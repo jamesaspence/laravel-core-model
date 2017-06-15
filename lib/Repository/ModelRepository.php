@@ -416,6 +416,6 @@ class ModelRepository implements RepositoryInterface, CriteriaRepositoryInterfac
      */
     public function __call($name, $arguments)
     {
-        return call_user_func_array($this->newModel()->{$name}, $arguments);
+        return $this->newModel()->$name(...$arguments);
     }
 }
