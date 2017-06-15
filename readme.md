@@ -1,4 +1,4 @@
-# Laravel Core Model
+# Laravel Core Model (Laracore)
 
 A repository, factory, and criteria layer for Eloquent models,
 providing a convenient repository interface that still allows
@@ -23,12 +23,11 @@ dependency injection without sacrificing features or versatility.
 
 ## Requirements
 
-- Laravel 5+ or Illuminate\Database 5+ (tested up to 5.2)
-- PHP 5.6+
+- Laravel 5.3+
 
 ## Installation
 
-    composer require jamesaspence/core-model
+    composer require jamesaspence/laravel-core-model
 
 ## Usage
 
