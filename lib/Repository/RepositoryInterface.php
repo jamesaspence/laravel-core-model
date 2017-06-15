@@ -221,4 +221,14 @@ interface RepositoryInterface
      * @return static
      */
     public function postQuery();
+
+    /**
+     * Starts a query without global scopes.
+     * @see Model::newQueryWithoutScope()
+     * @see Model::newQueryWithoutScopes()
+     *
+     * @param mixed $scopes
+     * @return Model
+     */
+    public function withoutGlobalScopes($scopes);
 }

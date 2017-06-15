@@ -5,6 +5,7 @@ namespace Laracore\Tests;
 use Illuminate\Database\Eloquent\Model;
 use Laracore\Repository\ModelRepository;
 use Laracore\Repository\Relation\RelationInterface;
+use Laracore\Tests\Stub\ModelStubWithScopes;
 use Mockery\Mock;
 use Mockery\MockInterface;
 use Laracore\Tests\Stub\ModelStub;
@@ -402,5 +403,38 @@ class ModelRepositoryTest extends TestCase
         $this->setUpNewModelMock($model);
 
         $this->repository->whereGet($column, $operator, $value, $with);
+    }
+
+    public function testWithoutGlobalScopes()
+    {
+        $methodName = 'withoutGlobalScopes';
+        $model = \Mockery::mock(ModelStubWithScopes::class);
+
+        $firstArgument = 'test';
+        $secondArgument = 'test2';
+        $thirdArgument = [$firstArgument, $secondArgument];
+
+        $model->shouldReceive($methodName)
+            ->with(null)
+            ->once();
+
+        $model->shouldReceive($methodName)
+            ->with($firstArgument)
+            ->once();
+
+        $model->shouldReceive($methodName)
+            ->with($secondArgument)
+            ->once();
+
+        $model->shouldReceive($methodName)
+            ->with($thirdArgument)
+            ->once();
+
+        $this->setUpNewModelMock($model);
+
+        $this->repository->withoutGlobalScopes();
+        $this->repository->withoutGlobalScopes($firstArgument);
+        $this->repository->withoutGlobalScopes($secondArgument);
+        $this->repository->withoutGlobalScopes($thirdArgument);
     }
 }

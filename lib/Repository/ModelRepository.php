@@ -335,6 +335,14 @@ class ModelRepository implements RepositoryInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function withoutGlobalScopes($scopes = null)
+    {
+        return $this->newModel()->withoutGlobalScopes($scopes);
+    }
+
+    /**
      * Our default method caller.
      * Delegates our method calls off to the model class itself,
      * ensuring that custom functions (like query scopes) are
