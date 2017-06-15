@@ -18,6 +18,14 @@ interface RepositoryInterface
     public function setModel($model);
 
     /**
+     * Retrieves the default model class.
+     * Used in the constructor if the model class is not set properly.
+     *
+     * @return Model
+     */
+    public function getDefaultModel();
+
+    /**
      * Retrieves the class name of the model this repository is meant to represent.
      * @return Model
      */

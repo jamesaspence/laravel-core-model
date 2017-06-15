@@ -2,8 +2,8 @@
 
 namespace Laracore\Repository;
 
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Laracore\Exception\ModelClassNotSetException;
 use Laracore\Exception\RelationInterfaceExceptionNotSetException;
 use Laracore\Repository\Relation\RelationInterface;
 use Laracore\Repository\Relation\RelationRepository;
@@ -22,6 +22,8 @@ class ModelRepository implements RepositoryInterface
 
     public function __construct($model = null, RelationInterface $repository = null)
     {
+        $model = (is_null($model) ? $this->getDefaultModel() : $model);
+
         $this->setModel($model);
         if (is_null($repository)) {
             $repository = new RelationRepository();
@@ -34,7 +36,17 @@ class ModelRepository implements RepositoryInterface
      */
     public function setModel($model)
     {
-        $this->className = $model;
+        if (!is_null($model)) {
+            $this->className = $model;
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDefaultModel()
+    {
+        return null;
     }
 
     /**
@@ -42,6 +54,10 @@ class ModelRepository implements RepositoryInterface
      */
     public function getModel()
     {
+        if (is_null($this->className)) {
+            throw new ModelClassNotSetException('A model class must be set on this ModelRepository instance.');
+        }
+
         return $this->className;
     }
 
@@ -327,7 +343,7 @@ class ModelRepository implements RepositoryInterface
         } elseif ($arguments instanceof Model) {
             /** @var Model $model */
             $model = $arguments;
-            
+
             return $model->$name();
         }
         return $this->newModel()->$name(...$arguments);
