@@ -83,6 +83,7 @@ class ModelRepositoryTest extends TestCase
 
     public function testSetAndGetRelationRepository()
     {
+        /** @var RelationInterface $repository */
         $repository = \Mockery::mock(RelationInterface::class);
         $this->repository->setRelationRepository($repository);
         $this->assertEquals($repository, $this->repository->getRelationRepository());
