@@ -2,6 +2,7 @@
 
 namespace Laracore\Tests;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Laracore\Exception\ModelClassNotSetException;
 use Laracore\Repository\ModelRepository;
@@ -173,16 +174,47 @@ class ModelRepositoryTest extends TestCase
     {
         $data = ['stuff' => 'things'];
 
+        $builder = \Mockery::mock(Builder::class);
+
+
         $model = $this->createMockModel();
         $model
+            ->shouldReceive('query')
+            ->once()
+            ->andReturn($builder);
+
+        $builder
             ->shouldReceive('create')
             ->with($data)
             ->once()
-            ->andReturnSelf();
+            ->andReturn($model);
 
         $this->setUpNewModelMock($model);
 
         $this->repository->create($data);
+    }
+
+    public function testForceCreate()
+    {
+        $data = ['stuff' => 'things'];
+
+        $builder = \Mockery::mock(Builder::class);
+
+        $model = $this->createMockModel();
+        $model
+            ->shouldReceive('query')
+            ->once()
+            ->andReturn($builder);
+
+        $builder
+            ->shouldReceive('forceCreate')
+            ->with($data)
+            ->once()
+            ->andReturn($model);
+
+        $this->setUpNewModelMock($model);
+
+        $this->repository->forceCreate($data);
     }
 
     public function testFirstOrCreate()

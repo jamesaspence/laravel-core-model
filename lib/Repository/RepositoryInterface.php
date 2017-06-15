@@ -67,10 +67,22 @@ interface RepositoryInterface
 
     /**
      * Creates a new model.
-     * @param $data
+     * Delegates from the model to the query builder.
+     * @see Builder::create()
+     *
+     * @param array $attributes
      * @return Model
      */
-    public function create($data);
+    public function create(array $attributes = []);
+
+    /**
+     * Force creates a new model.
+     * @see Builder::forceCreate()
+     *
+     * @param array $attributes
+     * @return mixed
+     */
+    public function forceCreate(array $attributes = []);
 
     /**
      * Finds the first instance, or creates a new model (immediately saving it)
