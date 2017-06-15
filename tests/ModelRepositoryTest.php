@@ -3,8 +3,10 @@
 namespace Laracore\Tests;
 
 use Illuminate\Database\Eloquent\Model;
+use Laracore\Exception\ModelClassNotSetException;
 use Laracore\Repository\ModelRepository;
 use Laracore\Repository\Relation\RelationInterface;
+use Laracore\Tests\Stub\ModelRepositoryWithDefaultModel;
 use Laracore\Tests\Stub\ModelStubWithScopes;
 use Mockery\Mock;
 use Mockery\MockInterface;
@@ -52,6 +54,31 @@ class ModelRepositoryTest extends TestCase
         $className = 'Test';
         $this->repository->setModel($className);
         $this->assertEquals($this->repository->getModel(), $className);
+    }
+
+    public function testConstructorSetsModelAndRelationInterface()
+    {
+        $relationMock = \Mockery::mock(RelationInterface::class);
+
+        $repository = new ModelRepository(ModelStub::class, $relationMock);
+
+        $this->assertEquals(ModelStub::class, $repository->getModel());
+        $this->assertEquals($relationMock, $repository->getRelationRepository());
+    }
+
+    public function testGetModelReturnsDefaultModel()
+    {
+        $repository = new ModelRepositoryWithDefaultModel();
+
+        $this->assertEquals($repository->getModel(), ModelStub::class);
+    }
+
+    /**
+     * @expectedException \Laracore\Exception\ModelClassNotSetException
+     */
+    public function testGetModelThrowsExceptionWithNoDefaultSet()
+    {
+        $this->repository->getModel();
     }
 
     public function testSetAndGetRelationRepository()
