@@ -169,6 +169,16 @@ interface RepositoryInterface
     public function update(Model $model, array $updatedValues);
 
     /**
+     * Updates or creates a model based on conditions.
+     * @see Builder::updateOrCreate()
+     *
+     * @param array $attributes
+     * @param array $values
+     * @return Model
+     */
+    public function updateOrCreate(array $attributes, array $values = []);
+
+    /**
      * Deletes a model.
      *
      * @param Model $model
@@ -214,13 +224,6 @@ interface RepositoryInterface
      * @return Model
      */
     public function load(Model $model, $relations = []);
-
-    /**
-     * Cleans up after the query is finished, if desired.
-     *
-     * @return static
-     */
-    public function postQuery();
 
     /**
      * Starts a query without global scopes.

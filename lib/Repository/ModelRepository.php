@@ -59,14 +59,10 @@ class ModelRepository implements RepositoryInterface
      */
     public function find($id, $with = [])
     {
-        $result = $this
+        return $this
             ->newModel()
             ->with($with)
             ->find($id);
-
-        $this->postQuery();
-
-        return $result;
     }
 
     /**
@@ -74,14 +70,10 @@ class ModelRepository implements RepositoryInterface
      */
     public function findOrFail($id, $with = [])
     {
-        $result = $this
+        return $this
             ->newModel()
             ->with($with)
             ->findOrFail($id);
-
-        $this->postQuery();
-
-        return $result;
     }
 
     /**
@@ -89,13 +81,9 @@ class ModelRepository implements RepositoryInterface
      */
     public function findOrNew($id, array $columns = ['*'])
     {
-        $result = $this
+        return $this
             ->newModel()
             ->findOrNew($id, $columns);
-
-        $this->postQuery();
-
-        return $result;
     }
 
     /**
@@ -103,13 +91,9 @@ class ModelRepository implements RepositoryInterface
      */
     public function create($data)
     {
-        $result = $this
+        return $this
             ->newModel()
             ->create($data);
-
-        $this->postQuery();
-
-        return $result;
     }
 
     /**
@@ -117,15 +101,9 @@ class ModelRepository implements RepositoryInterface
      */
     public function firstOrCreate(array $attributes, $with = [])
     {
-        $model = $this
+        return $this
             ->newModel()
             ->firstOrCreate($attributes);
-
-        $this->postQuery();
-
-        $result = $this->load($model, $with);
-
-        return $result;
     }
 
     /**
@@ -133,13 +111,9 @@ class ModelRepository implements RepositoryInterface
      */
     public function firstOrNew(array $attributes)
     {
-        $result = $this
+        return $this
             ->newModel()
             ->firstOrNew($attributes);
-
-        $this->postQuery();
-
-        return $result;
     }
 
     /**
@@ -147,13 +121,9 @@ class ModelRepository implements RepositoryInterface
      */
     public function all($columns = ['*'])
     {
-        $result = $this
+        return $this
             ->newModel()
             ->all($columns);
-
-        $this->postQuery();
-
-        return $result;
     }
 
     /**
@@ -170,13 +140,9 @@ class ModelRepository implements RepositoryInterface
      */
     public function with($with = [])
     {
-        $result = $this
+        return $this
             ->newModel()
             ->with($with);
-
-        $this->postQuery();
-
-        return $result;
     }
 
     /**
@@ -184,13 +150,9 @@ class ModelRepository implements RepositoryInterface
      */
     public function query()
     {
-        $result = $this
+        return $this
             ->newModel()
             ->query();
-
-        $this->postQuery();
-
-        return $result;
     }
 
     /**
@@ -245,13 +207,9 @@ class ModelRepository implements RepositoryInterface
      */
     public function select($columns = '*')
     {
-        $result = $this
+        return $this
             ->newModel()
             ->select($columns);
-
-        $this->postQuery();
-
-        return $result;
     }
 
     /**
@@ -275,14 +233,10 @@ class ModelRepository implements RepositoryInterface
      */
     public function paginate($perPage = 10, $with = [])
     {
-        $result = $this
+        return $this
             ->newModel()
             ->with($with)
             ->paginate($perPage);
-
-        $this->postQuery();
-
-        return $result;
     }
 
     /**
@@ -290,15 +244,11 @@ class ModelRepository implements RepositoryInterface
      */
     public function whereFirst($column, $operator, $value, $with = [])
     {
-        $result = $this
+        return $this
             ->newModel()
             ->with($with)
             ->where($column, $operator, $value)
             ->first();
-
-        $this->postQuery();
-
-        return $result;
     }
 
     /**
@@ -306,15 +256,11 @@ class ModelRepository implements RepositoryInterface
      */
     public function whereGet($column, $operator, $value, $with = [])
     {
-        $result = $this
+        return $this
             ->newModel()
             ->with($with)
             ->where($column, $operator, $value)
             ->get();
-
-        $this->postQuery();
-
-        return $result;
     }
 
     /**
@@ -329,31 +275,16 @@ class ModelRepository implements RepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function postQuery()
-    {
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function withoutGlobalScopes($scopes = null)
     {
         return $this->newModel()->withoutGlobalScopes($scopes);
     }
 
     /**
-     * Our default method caller.
-     * Delegates our method calls off to the model class itself,
-     * ensuring that custom functions (like query scopes) are
-     * supported.
-     *
-     * @param $name
-     * @param $arguments
-     * @return mixed
+     * {@inheritdoc}
      */
-    public function __call($name, $arguments)
+    public function updateOrCreate(array $attributes, array $values = [])
     {
-        return $this->newModel()->$name(...$arguments);
+        return $this->newModel()->updateOrCreate($attributes, $values);
     }
 }
