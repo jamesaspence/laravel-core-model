@@ -316,8 +316,20 @@ class ModelRepository implements RepositoryInterface
      * @param $arguments
      * @return mixed
      */
-    function __call($name, $arguments)
+    public function __call($name, $arguments)
     {
+        if (is_array($arguments) && $arguments[0] instanceof Model) {
+            /** @var Model $model */
+            $model = $arguments[0];
+            unset($arguments[0]);
+
+            return $model->$name(...$arguments);
+        } elseif ($arguments instanceof Model) {
+            /** @var Model $model */
+            $model = $arguments;
+            
+            return $model->$name();
+        }
         return $this->newModel()->$name(...$arguments);
     }
 }
