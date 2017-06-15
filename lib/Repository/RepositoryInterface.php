@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Laracore\Criteria\CriteriaInterface;
 use Laracore\Repository\Relation\RelationInterface;
 
 interface RepositoryInterface
@@ -17,6 +16,14 @@ interface RepositoryInterface
      * @param $model
      */
     public function setModel($model);
+
+    /**
+     * Retrieves the default model class.
+     * Used in the constructor if the model class is not set properly.
+     *
+     * @return Model
+     */
+    public function getDefaultModel();
 
     /**
      * Retrieves the class name of the model this repository is meant to represent.
@@ -169,11 +176,30 @@ interface RepositoryInterface
     public function update(Model $model, array $updatedValues);
 
     /**
+     * Updates or creates a model based on conditions.
+     * @see Builder::updateOrCreate()
+     *
+     * @param array $attributes
+     * @param array $values
+     * @return Model
+     */
+    public function updateOrCreate(array $attributes, array $values = []);
+
+    /**
      * Deletes a model.
      *
      * @param Model $model
      */
     public function delete(Model $model);
+
+    /**
+     * Deletes the models based on id.
+     * @see Model::destroy()
+     *
+     * @param array|int $ids
+     * @return mixed
+     */
+    public function destroy($ids);
 
     /**
      * Retrieves paginated results.
@@ -216,9 +242,19 @@ interface RepositoryInterface
     public function load(Model $model, $relations = []);
 
     /**
-     * Cleans up after the query is finished, if desired.
+     * Builds a query with soft-deleted models.
      *
-     * @return static
+     * @return Builder
      */
-    public function postQuery();
+    public function withTrashed();
+
+    /**
+     * Starts a query without global scopes.
+     * @see Model::newQueryWithoutScope()
+     * @see Model::newQueryWithoutScopes()
+     *
+     * @param mixed $scopes
+     * @return Builder
+     */
+    public function withoutGlobalScopes($scopes);
 }
