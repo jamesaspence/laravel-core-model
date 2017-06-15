@@ -287,4 +287,19 @@ class ModelRepository implements RepositoryInterface
     {
         return $this->newModel()->updateOrCreate($attributes, $values);
     }
+
+    /**
+     * Our default method caller.
+     * Delegates our method calls off to the model class itself,
+     * ensuring that custom functions (like query scopes) are
+     * supported.
+     *
+     * @param $name
+     * @param $arguments
+     * @return mixed
+     */
+    function __call($name, $arguments)
+    {
+        return $this->newModel()->$name(...$arguments);
+    }
 }
