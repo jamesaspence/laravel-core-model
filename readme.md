@@ -12,11 +12,10 @@ dependency injection without sacrificing features or versatility.
 - [Requirements](#requirements)
 - [Installation](#installation)
 - [Usage](#usage)
+  - ["Magic" Methods](#magic-methods)
   - [Relations](#relations)
   - [Dependency Injection](#dependency-injection)
   - [Model Factories](#model-factories)
-  - [Criteria](#criteria)
-    - [Examples](#examples)
   - [Inheritance](#inheritance)
 - [Future Plans](#future-plans)
 
@@ -76,6 +75,47 @@ methods, allowing, in the above example, a
 return of a query builder. This means we don't 
 lose any of the features we've come to love from 
 Eloquent.
+
+### "Magic" Methods
+
+Laracore's repositories support the calling of
+magic methods, such as local scope queries. For
+example, consider the following code:
+```php
+$model = User::active()->get();
+```
+
+You do not need to define a custom repository
+with this method hardcoded.
+```php
+$repository = new ModelRepository(User::class);
+$model = $repository->active()
+    ->get();
+```
+
+Instead, we can call our scope queries and other
+magic methods directly on the repository. The
+repository will delegate them on to the model
+class.
+
+Our magic method handling also listens for a model
+instance being the first argument of a magic method
+called via this repository. If the first argument is
+an instance of a model, it will instead call the method
+on the model instance itself! See the below example:
+
+```php
+//This
+$model = new User();
+$repository->doThing($model, $stuff, $things);
+
+//Is equivalent to this
+$model->doThing($stuff, $things);
+```
+
+This is meant to catch missed repository methods that we would
+want implemented. If this causes issues, feel free to reach out
+via the issues on this repository!
 
 ### Relations
 
@@ -177,48 +217,6 @@ $user = $factory->make([
 ]);
 ```
 
-### Criteria
-
-Laracore now supports custom criteria. 
-Criteria serve as a convenient way to 
-build consistent queries.
-
-#### Examples
-
-Setting a criteria:
-
-```php
-$criteria = new ModelCriteria();
-$criteria->setClosure(function ($model) {
-    return $model->where('name', '=', 'Test Testerton');
-});
-```
-
-Applying a criteria:
-
-```php
-$repository = new ModelRepository(User::class);
-$repository->addCriteria($criteria);
-
-//This will search for both an email AND name
-$user = $repository
-    ->where('email', '=', 'test@test.test')
-    ->first();
-```
-
-Criteria added to the repository will 
-automatically be applied to the next
-query, then discarded afterwards.
- 
-You can skip a criteria by calling `$criteria->skip()`.
-You can undo this by setting `$criteria->skip(false);`.
-
-Likewise, using `persist` and `perist(false)`, you can set
-a criteria to not be cleared after the next query. To clear 
-persistent criteria on the repository, you can call 
-`$repository->clearCriteria(true)`. Calling `clearCriteria`
-without the true flag will only clear non-persistent Criteria.
-
 ### Inheritance
 
 Another nice feature is the ability to extend 
@@ -233,31 +231,13 @@ criteria are set on the repository.
 ```php
 class UserRepository extends ModelRepository 
 {
-    //We just need to pass in our default model
-    public function __construct($model = null, RelationInterface $repository = null)
+   /**
+    * {@inheritdoc}
+    */
+    public function getDefaultModel()
     {
-        if (is_null($model)) {
-            $model = User::class;
-        }
-        parent::__construct($model, $repository);
-    }
-    
-    /**
-     * {@inheritdoc}
-     */
-    public function getDefaultCriteria()
-    {
-        $criteriaBag = new CriteriaBag;
-        
-        //Creates a criteria that is not skipped, 
-        //and is persistent.
-        $criteria = new Criteria(function ($model) {
-            return $model->where('name', '=', 'Test');
-        }, false, true);
-        
-        $criteriaBag->addCriteria($criteria);
-        
-        return $criteriaBag;
+        //We just need to pass in our default model
+        return User::class;
     }
 }
 ```

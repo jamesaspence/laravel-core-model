@@ -3,8 +3,11 @@
 namespace Laracore\Tests;
 
 use Illuminate\Database\Eloquent\Model;
+use Laracore\Exception\ModelClassNotSetException;
 use Laracore\Repository\ModelRepository;
 use Laracore\Repository\Relation\RelationInterface;
+use Laracore\Tests\Stub\ModelRepositoryWithDefaultModel;
+use Laracore\Tests\Stub\ModelStubWithScopes;
 use Mockery\Mock;
 use Mockery\MockInterface;
 use Laracore\Tests\Stub\ModelStub;
@@ -53,8 +56,34 @@ class ModelRepositoryTest extends TestCase
         $this->assertEquals($this->repository->getModel(), $className);
     }
 
+    public function testConstructorSetsModelAndRelationInterface()
+    {
+        $relationMock = \Mockery::mock(RelationInterface::class);
+
+        $repository = new ModelRepository(ModelStub::class, $relationMock);
+
+        $this->assertEquals(ModelStub::class, $repository->getModel());
+        $this->assertEquals($relationMock, $repository->getRelationRepository());
+    }
+
+    public function testGetModelReturnsDefaultModel()
+    {
+        $repository = new ModelRepositoryWithDefaultModel();
+
+        $this->assertEquals($repository->getModel(), ModelStub::class);
+    }
+
+    /**
+     * @expectedException \Laracore\Exception\ModelClassNotSetException
+     */
+    public function testGetModelThrowsExceptionWithNoDefaultSet()
+    {
+        $this->repository->getModel();
+    }
+
     public function testSetAndGetRelationRepository()
     {
+        /** @var RelationInterface $repository */
         $repository = \Mockery::mock(RelationInterface::class);
         $this->repository->setRelationRepository($repository);
         $this->assertEquals($repository, $this->repository->getRelationRepository());
@@ -402,5 +431,38 @@ class ModelRepositoryTest extends TestCase
         $this->setUpNewModelMock($model);
 
         $this->repository->whereGet($column, $operator, $value, $with);
+    }
+
+    public function testWithoutGlobalScopes()
+    {
+        $methodName = 'withoutGlobalScopes';
+        $model = \Mockery::mock(ModelStubWithScopes::class);
+
+        $firstArgument = 'test';
+        $secondArgument = 'test2';
+        $thirdArgument = [$firstArgument, $secondArgument];
+
+        $model->shouldReceive($methodName)
+            ->with(null)
+            ->once();
+
+        $model->shouldReceive($methodName)
+            ->with($firstArgument)
+            ->once();
+
+        $model->shouldReceive($methodName)
+            ->with($secondArgument)
+            ->once();
+
+        $model->shouldReceive($methodName)
+            ->with($thirdArgument)
+            ->once();
+
+        $this->setUpNewModelMock($model);
+
+        $this->repository->withoutGlobalScopes();
+        $this->repository->withoutGlobalScopes($firstArgument);
+        $this->repository->withoutGlobalScopes($secondArgument);
+        $this->repository->withoutGlobalScopes($thirdArgument);
     }
 }
