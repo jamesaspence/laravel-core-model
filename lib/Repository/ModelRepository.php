@@ -334,6 +334,13 @@ class ModelRepository implements RepositoryInterface
      */
     public function __call($name, $arguments)
     {
+        /*
+         * If our first argument is an instance of a model, we
+         * invoke our method on the model instance, passing in the
+         * remaining arguments.
+         * Likewise, if we have a singular argument and it's an
+         * instance of a mode, we invoke our method on that instance.
+         */
         if (is_array($arguments) && $arguments[0] instanceof Model) {
             /** @var Model $model */
             $model = $arguments[0];
@@ -346,6 +353,7 @@ class ModelRepository implements RepositoryInterface
 
             return $model->$name();
         }
+
         return $this->newModel()->$name(...$arguments);
     }
 }
