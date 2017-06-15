@@ -403,4 +403,19 @@ class ModelRepository implements RepositoryInterface, CriteriaRepositoryInterfac
     {
         return new CriteriaBag();
     }
+
+    /**
+     * Our default method caller.
+     * Delegates our method calls off to the model class itself,
+     * ensuring that custom functions (like query scopes) are
+     * supported.
+     *
+     * @param $name
+     * @param $arguments
+     * @return mixed
+     */
+    public function __call($name, $arguments)
+    {
+        return call_user_func_array($this->newModel()->{$name}, $arguments);
+    }
 }
