@@ -2,6 +2,7 @@
 
 namespace Laracore\Repository;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Laracore\Exception\RelationInterfaceExceptionNotSetException;
 use Laracore\Repository\Relation\RelationInterface;
@@ -286,6 +287,23 @@ class ModelRepository implements RepositoryInterface
     public function updateOrCreate(array $attributes, array $values = [])
     {
         return $this->newModel()->updateOrCreate($attributes, $values);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function destroy($ids)
+    {
+        $className = $this->getModel();
+        return $className::destroy($ids);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function withTrashed()
+    {
+        return $this->newModel()->withTrashed();
     }
 
     /**

@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Laracore\Criteria\CriteriaInterface;
 use Laracore\Repository\Relation\RelationInterface;
 
 interface RepositoryInterface
@@ -186,6 +185,15 @@ interface RepositoryInterface
     public function delete(Model $model);
 
     /**
+     * Deletes the models based on id.
+     * @see Model::destroy()
+     *
+     * @param array|int $ids
+     * @return mixed
+     */
+    public function destroy($ids);
+
+    /**
      * Retrieves paginated results.
      *
      * @param int $perPage
@@ -226,12 +234,19 @@ interface RepositoryInterface
     public function load(Model $model, $relations = []);
 
     /**
+     * Builds a query with soft-deleted models.
+     *
+     * @return Builder
+     */
+    public function withTrashed();
+
+    /**
      * Starts a query without global scopes.
      * @see Model::newQueryWithoutScope()
      * @see Model::newQueryWithoutScopes()
      *
      * @param mixed $scopes
-     * @return Model
+     * @return Builder
      */
     public function withoutGlobalScopes($scopes);
 }
