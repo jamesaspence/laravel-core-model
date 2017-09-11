@@ -106,11 +106,21 @@ class ModelRepository implements RepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function create($data)
+    public function create(array $attributes = [])
     {
         return $this
-            ->newModel()
-            ->create($data);
+            ->query()
+            ->create($attributes);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function forceCreate(array $attributes = [])
+    {
+        return $this
+            ->query()
+            ->forceCreate($attributes);
     }
 
     /**
