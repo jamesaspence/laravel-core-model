@@ -11,10 +11,10 @@
     ],
     "minimum-stability": "stable",
     "require": {
-        "illuminate/database": "^5.3"
+        "illuminate/database": "^5.4"
     },
     "suggest": {
-        "illuminate/pagination": "(Required to paginate the result set (^5.3).)"
+        "illuminate/pagination": "(Required to paginate the result set (^5.4).)"
     },
     "autoload": {
         "psr-4": {
